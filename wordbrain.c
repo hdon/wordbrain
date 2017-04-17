@@ -75,12 +75,6 @@ typedef struct MutableState {
 static LWord *wordListHead;
 
 static void solve(MutableState *ms, int x, int y) {
-  /* Is this a valid solution? */
-  //printf("%snum_words_remaining: %d\n", indentation, (int) ms->num_words_remaining);
-  if (ms->num_words_remaining == 0) {
-    printf("%ssolution: %s\n", indentation, ms->solution);
-    return;
-  }
   /* Is this a valid move? */
   if (x < 0 || x >= ms->puzzle_w) return;
   if (y < 0 || y >= ms->puzzle_w) return;
@@ -117,10 +111,15 @@ static void solve(MutableState *ms, int x, int y) {
           char * wordTail = ms->wordTail;
           ms->wordHead = ms->wordTail;
 
-          /* Recurse */
-          for (int x2=0; x2<ms->puzzle_w; x2++)
-          for (int y2=0; y2<ms->puzzle_h; y2++)
-            solve(ms, x2, y2);
+          /* Is this a valid solution? */
+          if (ms->num_words_remaining == 0) {
+            printf("%ssolution: %s\n", indentation, ms->solution);
+          } else {
+            /* Recurse */
+            for (int x2=0; x2<ms->puzzle_w; x2++)
+            for (int y2=0; y2<ms->puzzle_h; y2++)
+              solve(ms, x2, y2);
+          }
 
           /* Unmutate exit state */
           ms->word_lengths_remaining[word_len_index] = word_len;
